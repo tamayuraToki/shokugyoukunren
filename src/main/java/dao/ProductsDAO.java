@@ -16,7 +16,7 @@ public class ProductsDAO {
 	private final String DB_USER ="sa";
 	private final String DB_PASS="";
 	
-	public List<Product> findAll(){
+	public List<Product> findAll(String userName){
 		
 		List<Product> productList = new ArrayList<>();
 		//JDBCドライバを読み込む
@@ -29,8 +29,11 @@ public class ProductsDAO {
 		//データベース接続
 		try(Connection conn = DriverManager.getConnection(JDBC_URL,DB_USER,DB_PASS)){
 			//SELECT文を準
-			String sql = "SELECT ID,NAME,PRICE,IMAGE_URL FROM PRODUCTS ORDER BY ID ASC;";
+			String sql = "SELECT ID,NAME,PRICE,IMAGE_URL,USER_NAME FROM PRODUCTS WHERE USER_NAME = ? ORDER BY ID ASC;";
 			PreparedStatement pStmt = conn.prepareStatement(sql);
+			
+			//SELECT文の?に使用する値をセットしてSQL文を完成させる
+			pStmt.setString(1, userName);
 			
 			//SELECT文を実行
 			ResultSet rs = pStmt.executeQuery();
@@ -89,7 +92,7 @@ public class ProductsDAO {
 		return product;
 	}
 	
-	public boolean create(Product product) {
+	public boolean create(Product product,String userName) {
 		
 		//JDBCドライバを読み込む
 		try {
@@ -101,13 +104,14 @@ public class ProductsDAO {
 		//データベース接続
 		try(Connection conn = DriverManager.getConnection(JDBC_URL,DB_USER,DB_PASS)){
 			//INSERT文を準備(idは自動採番の為指定しなくてOK)
-			String sql = "INSERT INTO PRODUCTS(NAME,PRICE,IMAGE_URL) VALUES (?,?,?);";
+			String sql = "INSERT INTO PRODUCTS(NAME,PRICE,IMAGE_URL,USER_NAME) VALUES (?,?,?,?);";
 			PreparedStatement pStmt = conn.prepareStatement(sql);
 			
 			//INSERT文の?に使用する値をセットしてSQL文を完成させる
 			pStmt.setString(1, product.getProductName());
 			pStmt.setInt(2, product.getPrice());
 			pStmt.setString(3, product.getImageUrl());
+			pStmt.setString(4, userName);
 			
 			//INSERT文を実行
 			int result = pStmt.executeUpdate();

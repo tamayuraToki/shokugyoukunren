@@ -10,9 +10,9 @@ public class ProductService {
 
 	
     // 在庫リストを取得するメソッド
-    public List<Product> getProducts() {
+    public List<Product> getProducts(User user) {
     	ProductsDAO dao = new ProductsDAO();
-    	productList = dao.findAll();
+    	productList = dao.findAll(user.getName());
         return productList;
     }
 
@@ -25,9 +25,9 @@ public class ProductService {
     }
     
     //在庫のデータを追加するメソッド
-    public boolean insertProduct(Product product) {
+    public boolean insertProduct(Product product,User user) {
     	ProductsDAO dao = new ProductsDAO();
-    	return dao.create(product);
+    	return dao.create(product,user.getName());
     
     }
 }

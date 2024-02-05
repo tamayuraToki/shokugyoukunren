@@ -11,10 +11,12 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
 import model.Product;
 import model.ProductService;
+import model.User;
 
 /**
  * Servlet implementation class ProductInsertServlet
@@ -36,7 +38,18 @@ public class ProductInsertServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//
+		
+		//ログインしているかの確認
+		//セッションスコープからユーザ情報を取得
+		HttpSession session = request.getSession();
+		User loginUser = (User)session.getAttribute("loginUser");
+		if(loginUser == null) {
+			//未ログインの場合トップページへ遷移
+			response.sendRedirect("index.jsp");
+			return;
+		}
+		
+		
 		RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/jsp/productInsert.jsp");
 		dispatcher.forward(request, response);
 	}
@@ -46,6 +59,10 @@ public class ProductInsertServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+		//セッションスコープからユーザ情報を取得
+		HttpSession session = request.getSession();
+		User loginUser = (User)session.getAttribute("loginUser");
+		
 		String productName=request.getParameter("productName");
 		int price=Integer.parseInt(request.getParameter("price"));
 		//name属性がpictのファイルをPartオブジェクトとして取得
@@ -63,10 +80,10 @@ public class ProductInsertServlet extends HttpServlet {
 		//データをDBにInsertする
 		Product product = new Product(productName,price,"upload/"+filename);
 		ProductService ps = new ProductService();
-		ps.insertProduct(product);
+		ps.insertProduct(product,loginUser);
 		
 		// 商品情報を取得するメソッド
-        List<Product> productList = ps.getProducts(); 
+        List<Product> productList = ps.getProducts(loginUser); 
         request.setAttribute("productList", productList);
 		
 		RequestDispatcher rd=request.getRequestDispatcher("/WEB-INF/jsp/productList.jsp");

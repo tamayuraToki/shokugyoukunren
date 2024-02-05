@@ -8,9 +8,11 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import model.Product;
 import model.ProductService;
+import model.User;
 
 /**
  * Servlet implementation class ProductDetailsServlet
@@ -31,6 +33,17 @@ public class ProductDetailsServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		//ログインしているかの確認
+		//セッションスコープからユーザ情報を取得
+		HttpSession session = request.getSession();
+		User loginUser = (User)session.getAttribute("loginUser");
+		if(loginUser == null) {
+			//未ログインの場合トップページへ遷移
+			response.sendRedirect("index.jsp");
+			return;
+		}
+			
 		//在庫IDを取得する
 		int productId = Integer.parseInt(request.getParameter("productId"));
 		
