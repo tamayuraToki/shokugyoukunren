@@ -12,7 +12,6 @@ import javax.servlet.http.HttpSession;
 
 import model.Product;
 import model.ProductService;
-import model.User;
 
 /**
  * Servlet implementation class ProductDetailsServlet
@@ -37,8 +36,8 @@ public class ProductDetailsServlet extends HttpServlet {
 		//ログインしているかの確認
 		//セッションスコープからユーザ情報を取得
 		HttpSession session = request.getSession();
-		User loginUser = (User)session.getAttribute("loginUser");
-		if(loginUser == null) {
+		String userId = (String)session.getAttribute("userId");
+		if(userId == null) {
 			//未ログインの場合トップページへ遷移
 			response.sendRedirect("index.jsp");
 			return;

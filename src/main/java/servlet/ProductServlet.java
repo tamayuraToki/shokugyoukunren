@@ -13,7 +13,6 @@ import javax.servlet.http.HttpSession;
 
 import model.Product;
 import model.ProductService;
-import model.User;
 
 /**
  * Servlet implementation class ProductServlet
@@ -37,14 +36,14 @@ public class ProductServlet extends HttpServlet {
 		//ログインしているかの確認
 		//セッションスコープからユーザ情報を取得
 		HttpSession session = request.getSession();
-		User loginUser = (User)session.getAttribute("loginUser");
-		if(loginUser == null) {
+		String userId = (String)session.getAttribute("userId");
+		if(userId == null) {
 			//未ログインの場合トップページへ遷移
 			response.sendRedirect("index.jsp");
 			return;
 		}
 		ProductService ps = new ProductService();
-        List<Product> productList = ps.getProducts(loginUser); // 商品情報を取得するメソッド
+        List<Product> productList = ps.getProducts(userId); // 商品情報を取得するメソッド
         request.setAttribute("productList", productList);
 
         RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/jsp/productList.jsp");

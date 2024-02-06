@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page import="java.util.List" %>
 <%@ page import="model.Product" %>
 
 <%
@@ -18,7 +17,11 @@
 		<img src="${product.imageUrl}" alt="${product.productName}">
 		<p>商品名: ${product.productName}</p>
 		<p>価格: ${product.price}</p>
-		<!-- 他の商品詳細情報を表示 -->
+		<p>購入店: ${product.buyer}</p>
+		<p>在庫数: ${product.stock}</p>
+		<a href="ProductUpdateServlet?productId=${product.productId}">
+		データ更新
+		</a>
 	</div>
 </body>
 </html>

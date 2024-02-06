@@ -21,8 +21,10 @@
     </form>
     <div class="wrapper grid">
 	<% for (int i = 0; i < productList.size(); i++) { %>
-		<div class="item">
-		<img src="<%= productList.get(i).getImageUrl() %>" alt="<%= productList.get(i).getProductName() %>">
+		<div class="flex-item">
+			<div class="image-wrap">
+				<img src="<%= productList.get(i).getImageUrl() %>" alt="<%= productList.get(i).getProductName() %>">
+			</div>
 		<a href="ProductDetailsServlet?productId=<%= productList.get(i).getProductId()%>">
 			<%= productList.get(i).getProductName()%>
 		</a>

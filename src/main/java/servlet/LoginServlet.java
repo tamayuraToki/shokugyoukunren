@@ -38,7 +38,7 @@ public class LoginServlet extends HttpServlet {
 		if(isLogin) {
 			//ユーザ情報をセッションスコープに保存
 			HttpSession session = request.getSession();
-			session.setAttribute("loginUser", user);
+			session.setAttribute("userId", name);
 		}
 		
 		//ログイン結果画面にフォワード

@@ -11,8 +11,10 @@
 
 <form action="ProductInsertServlet" method="post" enctype="multipart/form-data">
     在庫名<input type="text" name="productName"/><br>
-    写真<input type="file" name="pict"/><br>
+    写真<input type="file" name="pict" accept=".png, .jpg"/><br>
     値段<input type="text" name="price"/><br>
+    購入店<input type="text" name="buyer"/><br>
+    在庫数<input type="text" name="stock"/><br>
 
     <input type="submit" value="登録" />
 </form>
