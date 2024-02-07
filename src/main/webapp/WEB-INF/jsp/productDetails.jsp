@@ -22,6 +22,9 @@
 		<a href="ProductUpdateServlet?productId=${product.productId}">
 		データ更新
 		</a>
+		<a href="ProductDeleteServlet?productId=${product.productId}">
+		データ削除
+		</a>
 	</div>
 </body>
 </html>

@@ -10,20 +10,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import model.Product;
 import model.ProductService;
 
 /**
- * Servlet implementation class ProductDetailsServlet
+ * Servlet implementation class ProductDeleteServlet
  */
-@WebServlet("/ProductDetailsServlet")
-public class ProductDetailsServlet extends HttpServlet {
+@WebServlet("/ProductDeleteServlet")
+public class ProductDeleteServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public ProductDetailsServlet() {
+    public ProductDeleteServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -32,7 +31,6 @@ public class ProductDetailsServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
 		//ログインしているかの確認
 		//セッションスコープからユーザ情報を取得
 		HttpSession session = request.getSession();
@@ -42,29 +40,48 @@ public class ProductDetailsServlet extends HttpServlet {
 			response.sendRedirect("index.jsp");
 			return;
 		}
-			
+		
 		//在庫IDを取得する
 		int productId = Integer.parseInt(request.getParameter("productId"));
 		
-		//在庫IDから在庫を特定する
-		ProductService ps = new ProductService();
-		Product product = ps.getProductById(productId); // 商品情報を取得するメソッド
-		
 		//リクエストスコープに保存
-		request.setAttribute("product", product);
+		request.setAttribute("productId", productId);
 		
 		//特定した在庫を表示する
-		RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/jsp/productDetails.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/jsp/productDelete.jsp");
 		dispatcher.forward(request, response);
-		
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
+		//在庫IDを取得する
+		int productId = Integer.parseInt(request.getParameter("productId"));
+		
+		//選択がNOであれば前の画面に遷移する
+		String isYesNo= (String)request.getParameter("isYesNo");
+		if(isYesNo.equals("NO")) {
+			//削除しない場合
+			//在庫詳細画面に遷移する
+			String targetServletURL = "/ProductDetailsServlet";
+			RequestDispatcher rd= getServletContext().getRequestDispatcher(targetServletURL);
+			
+			rd.forward(request, response);
+			
+			return;
+		}
+		
+		//選択がYESの場合
+		//DBからデータを削除する
+		ProductService ps = new ProductService();
+		ps.deleteProduct(productId);
+		
+
+		//メイン画面に遷移する
+		String targetServletURL = "/ProductServlet";
+        RequestDispatcher rd= getServletContext().getRequestDispatcher(targetServletURL);
+        rd.forward(request, response);
 	}
 
 }

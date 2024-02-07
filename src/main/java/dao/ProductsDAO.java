@@ -168,4 +168,36 @@ public class ProductsDAO {
 		
 		return true;
 	}
+	
+	public boolean delete(int id) {
+		
+		//JDBCドライバを読み込む
+		try {
+			Class.forName("org.h2.Driver");
+		}catch(ClassNotFoundException e) {
+			throw new IllegalStateException("JDBCドライバを読み込めませんでした。");
+		}
+		
+		//データベース接続
+		try(Connection conn = DriverManager.getConnection(JDBC_URL,DB_USER,DB_PASS)){
+			//DELETE文を準備
+			String sql = "DELETE FROM PRODUCTS WHERE ID = ?";
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			
+			//DELETE文の?に使用する値をセットしてSQL文を完成させる
+			pStmt.setInt(1, id);
+			
+			//DELETE文を実行
+			int result = pStmt.executeUpdate();
+			if(result != 1) {
+				return false;
+			}
+			
+		}catch(SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+		
+		return true;
+	}
 }

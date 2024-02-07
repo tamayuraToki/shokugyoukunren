@@ -31,9 +31,16 @@ public class ProductService {
     
     }
     
+    //在庫情報更新用メソッド
     public boolean updateProduct(Product product) {
     	ProductsDAO dao = new ProductsDAO();
     	return dao.update(product);
+    }
+    
+    //在庫情報更新用メソッド
+    public boolean deleteProduct(int productId) {
+    	ProductsDAO dao = new ProductsDAO();
+    	return dao.delete(productId);
     }
     
 }
