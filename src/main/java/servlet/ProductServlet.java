@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import model.Product;
-import model.ProductService;
+import model.ProductServiceLogic;
 
 /**
  * Servlet implementation class ProductServlet
@@ -42,8 +42,18 @@ public class ProductServlet extends HttpServlet {
 			response.sendRedirect("index.jsp");
 			return;
 		}
-		ProductService ps = new ProductService();
-        List<Product> productList = ps.getProducts(userId); // 商品情報を取得するメソッド
+		
+		String likeFlg = request.getParameter("isLike");
+		List<Product> productList = null;
+		ProductServiceLogic ps = new ProductServiceLogic();
+		if(likeFlg == null) {
+			productList = ps.getProducts(userId); // 商品情報を取得
+		}else if(likeFlg.equals("Like")) {
+			String searchWord =request.getParameter("searchWord");
+			System.out.println(searchWord);
+			productList = ps.getProducts(userId,searchWord); // 商品情報を取得
+		}
+		 
         request.setAttribute("productList", productList);
 
         RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/jsp/productList.jsp");

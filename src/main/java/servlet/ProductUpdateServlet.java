@@ -14,7 +14,7 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
 import model.Product;
-import model.ProductService;
+import model.ProductServiceLogic;
 
 /**
  * Servlet implementation class ProductUpdateServlet
@@ -50,7 +50,7 @@ public class ProductUpdateServlet extends HttpServlet {
 		int productId = Integer.parseInt(request.getParameter("productId"));
 		
 		//在庫IDから在庫を特定する
-		ProductService ps = new ProductService();
+		ProductServiceLogic ps = new ProductServiceLogic();
 		Product product = ps.getProductById(productId); // 商品情報を取得するメソッド
 		
 		//リクエストスコープに保存
@@ -92,7 +92,7 @@ public class ProductUpdateServlet extends HttpServlet {
 			product = new Product(productId,productName,price,biforPict,buyer,stock);
 		}
 		
-		ProductService ps = new ProductService();
+		ProductServiceLogic ps = new ProductServiceLogic();
 		ps.updateProduct(product);
 		
 		//メイン画面に遷移する

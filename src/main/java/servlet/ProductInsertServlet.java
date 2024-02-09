@@ -15,7 +15,7 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
 import model.Product;
-import model.ProductService;
+import model.ProductServiceLogic;
 
 /**
  * Servlet implementation class ProductInsertServlet
@@ -47,7 +47,6 @@ public class ProductInsertServlet extends HttpServlet {
 			response.sendRedirect("index.jsp");
 			return;
 		}
-		
 		
 		RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/jsp/productInsert.jsp");
 		dispatcher.forward(request, response);
@@ -81,7 +80,7 @@ public class ProductInsertServlet extends HttpServlet {
 		
 		//データをDBにInsertする
 		Product product = new Product(productName,price,"upload/"+filename,buyer,stock);
-		ProductService ps = new ProductService();
+		ProductServiceLogic ps = new ProductServiceLogic();
 		ps.insertProduct(product,userId);
 		
 		//メイン画面に遷移する

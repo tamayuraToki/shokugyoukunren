@@ -45,6 +45,7 @@ public class AccountsDAO {
 				account = new Account(userId,pass,mail,name);
 			}
 			
+			
 		}catch(SQLException e) {
 			e.printStackTrace();
 			return null;

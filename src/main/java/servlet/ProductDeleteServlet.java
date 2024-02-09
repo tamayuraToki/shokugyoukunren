@@ -1,6 +1,9 @@
 package servlet;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -10,7 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import model.ProductService;
+import model.Product;
+import model.ProductServiceLogic;
 
 /**
  * Servlet implementation class ProductDeleteServlet
@@ -73,11 +77,24 @@ public class ProductDeleteServlet extends HttpServlet {
 		}
 		
 		//選択がYESの場合
+		ProductServiceLogic ps = new ProductServiceLogic();
+		
+		//画像のURLを取得する
+		Product product = ps.getProductById(productId);
+		String imageUrl =getServletContext().getRealPath("") + product.getImageUrl();
+		
+		Path path = Paths.get(imageUrl);
+		
+		try{
+			Files.delete(path);
+		}catch(IOException e) {
+			System.out.println(e);
+		}
+		
 		//DBからデータを削除する
-		ProductService ps = new ProductService();
 		ps.deleteProduct(productId);
 		
-
+		
 		//メイン画面に遷移する
 		String targetServletURL = "/ProductServlet";
         RequestDispatcher rd= getServletContext().getRequestDispatcher(targetServletURL);
