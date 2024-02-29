@@ -14,7 +14,7 @@
 - tomcat 9
 - H2DB
 
-#動作デモ
+## 動作デモ
 動画編集もしていないので分かりにくいですが、上記の機能全て実施しています。
 https://www.youtube.com/watch?v=LL9eLeeFuGU
 
